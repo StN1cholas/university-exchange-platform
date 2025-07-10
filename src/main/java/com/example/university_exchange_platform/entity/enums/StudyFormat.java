@@ -1,4 +1,5 @@
 package com.example.university_exchange_platform.entity.enums;
 
-public class StudyFormat {
+public enum StudyFormat {
+    очно, заочно, очно_заочно
 }
