@@ -38,29 +38,36 @@ const filterApplyBtn = document.getElementById('filterApplyBtn');
 const selectedFilters = document.getElementById('selectedFilters');
 let activeCategory = null;
 
-// Пример данных для фильтра
-const universitiesList = [
-    'ИТМО', 'ННГУ', 'МГУ', 'МФТИ', 'УРФУ', 'ДФУ'
-];
+// // Пример данных для фильтра
+// const universitiesList = [
+//     'ИТМО', 'ННГУ', 'МГУ', 'МФТИ', 'УРФУ', 'ДФУ'
+// ];
 let selectedUniversities = [];
 
-// --- Данные для фильтра ---
-const directionsList = [
-    'Социология', 'Радиофизика', 'Компьютерные технологии', 'Философия', 'Религиоведение'
-];
-const formsList = ['Очно', 'Заочно'];
-const languagesList = ['Русский', 'Английский'];
-const durationsList = ['3 месяца', '6 месяцев', '9 месяцев'];
-const citiesList = [
-    'г. Нижний Новгород, Нижегородская область',
-    'г. Екатеринбург, Свердловская область',
-    'г. Москва, Московская область',
-    'г. Санкт-Петербург, Ленинградская область',
-    'г. Владивосток, Приморский край',
-    'г. Казань, Республика Татарстан'
-];
+// // --- Данные для фильтра ---
+// const directionsList = [
+//     'Социология', 'Радиофизика', 'Компьютерные технологии', 'Философия', 'Религиоведение'
+// ];
+// const formsList = ['Очно', 'Заочно'];
+// const languagesList = ['Русский', 'Английский'];
+// const durationsList = ['3 месяца', '6 месяцев', '9 месяцев'];
+// const citiesList = [
+//     'г. Нижний Новгород, Нижегородская область',
+//     'г. Екатеринбург, Свердловская область',
+//     'г. Москва, Московская область',
+//     'г. Санкт-Петербург, Ленинградская область',
+//     'г. Владивосток, Приморский край',
+//     'г. Казань, Республика Татарстан'
+// ];
 
-let selectedGrade = 3.0;
+let universitiesList = [];
+let directionsList = []; // Мы пока не сделали для него ручку, так что он будет пуст
+let citiesList = [];
+let languagesList = [];
+let formsList = [];
+let durationsList = [];
+
+let selectedGrade = null;
 let selectedDirection = null;
 let selectedForm = null;
 let selectedLanguage = null;
@@ -68,6 +75,55 @@ let selectedCity = null;
 let selectedDuration = null;
 let universitySearch = '';
 let citySearch = '';
+
+// --- ИЗМЕНЕНИЕ 2: ДОБАВЛЯЕМ НОВУЮ ФУНКЦИЮ ЗАГРУЗКИ ДАННЫХ ---
+
+/**
+ * Загружает все необходимые данные для фильтров с бэкенда.
+ */
+async function loadFilterData() {
+    console.log("Загружаем данные для фильтров...");
+    try {
+        // Делаем все запросы одновременно для максимальной скорости
+        const [
+            citiesRes,
+            universitiesRes,
+            languagesRes,
+            durationsRes,
+            fieldsOfStudyRes,
+            studyFormatsRes
+        ] = await Promise.all([
+            fetch('http://localhost:8080/api/v1/filters/cities'),
+            fetch('http://localhost:8080/api/v1/filters/universities'),
+            fetch('http://localhost:8080/api/v1/filters/languages'),
+            fetch('http://localhost:8080/api/v1/filters/durations'),
+            fetch('http://localhost:8080/api/v1/filters/fields-of-study'),
+            fetch('http://localhost:8080/api/v1/filters/study-formats')
+        ]);
+
+        // Превращаем ответы в JSON
+        const cities = await citiesRes.json();
+        const universities = await universitiesRes.json();
+        const languages = await languagesRes.json();
+        const durations = await durationsRes.json();
+        const fieldsOfStudy = await fieldsOfStudyRes.json();
+        const studyFormats = await studyFormatsRes.json();
+
+        // Заполняем наши пустые массивы реальными данными из БД
+        // Приводим города к формату "г. Город, Область", чтобы фронтенд не сломался
+        citiesList = cities.map(city => `г. ${city}`);
+        universitiesList = universities;
+        languagesList = languages;
+        durationsList = durations;
+        directionsList = fieldsOfStudy;
+        formsList = studyFormats;
+
+        console.log("Данные для фильтров успешно загружены!");
+
+    } catch (error) {
+        console.error("Не удалось загрузить данные для фильтров:", error);
+    }
+}
 
 const courseOptions = [
     { group: 'Бакалавриат', values: ['1 курс', '2 курс', '3 курс', '4 курс'] },
@@ -330,13 +386,13 @@ filterCategories.forEach(btn => {
     });
 });
 
-// При загрузке все подполя скрыты
-window.addEventListener('DOMContentLoaded', () => {
-    filterCategories.forEach(b => b.classList.remove('active'));
-    filterOptions.classList.remove('active');
-    filterApplyBtn.style.display = 'none';
-    activeCategory = null;
-});
+// // При загрузке все подполя скрыты
+// window.addEventListener('DOMContentLoaded', () => {
+//     filterCategories.forEach(b => b.classList.remove('active'));
+//     filterOptions.classList.remove('active');
+//     filterApplyBtn.style.display = 'none';
+//     activeCategory = null;
+// });
 
 // Кнопка 'Принять' скрывает подполя
 filterApplyBtn.addEventListener('click', () => {
@@ -363,6 +419,7 @@ function renderSelectedFilters() {
         };
         filter.appendChild(removeBtn);
         selectedFilters.appendChild(filter);
+        //fetchPrograms();
     }
     // Вузы
     selectedUniversities.forEach(u => {
@@ -469,10 +526,174 @@ function renderSelectedFilters() {
         filter.appendChild(removeBtn);
         selectedFilters.appendChild(filter);
     }
+    fetchPrograms();
 }
 
-// --- Логика авторизации для главной страницы ---
-window.addEventListener('DOMContentLoaded', () => {
+// --- НОВЫЙ БЛОК: Логика взаимодействия с бэкендом ---
+
+// Контейнер, куда мы будем вставлять карточки программ
+const programsContainer = document.getElementById('programsContainer');
+
+/**
+ * Функция для отрисовки карточек программ на странице
+ * @param {Array} programs - Массив объектов программ, полученный от бэкенда
+ */
+function renderPrograms(programs) {
+    if (!programsContainer) return; // Если контейнера нет, ничего не делаем
+
+    programsContainer.innerHTML = ''; // Очищаем старые результаты
+
+    if (programs.length === 0) {
+        programsContainer.innerHTML = '<p class="not-found">По вашему запросу ничего не найдено.</p>';
+        return;
+    }
+
+    programs.forEach(program => {
+        // Создаем HTML-элемент для одной карточки
+        const card = document.createElement('div');
+        card.className = 'program-card'; // Присваиваем класс для стилизации
+
+        // Наполняем карточку данными из объекта program
+        card.innerHTML = `
+            <h3 class="program-title">${program.title}</h3>
+            <p class="university-name">${program.universityName}, ${program.city}</p>
+            <div class="program-details">
+                <span><strong>Язык:</strong> ${program.language}</span>
+                <span><strong>Длительность:</strong> ${program.duration}</span>
+                <span><strong>GPA от:</strong> ${program.minGpaRequired}</span>
+            </div>
+            <p class="program-description">${program.description || ''}</p>
+            <p class="program-competencies"><strong>Компетенции:</strong> ${program.competencies || ''}</p>
+        `;
+
+        // Добавляем созданную карточку в контейнер
+        programsContainer.appendChild(card);
+    });
+}
+
+
+/**
+ * Главная функция для запроса программ с бэкенда
+ */
+async function fetchPrograms() {
+    // 1. Собираем все выбранные фильтры в объект
+    const params = new URLSearchParams();
+
+    // ВАЖНО: Мы берем значения из тех же переменных, что и в твоем коде
+    if (selectedCity) {
+        // На бэкенд отправляем только название города
+        const cleanCity = selectedCity.split(',')[0].replace('г.', '').trim();
+        params.append('city', cleanCity);
+    }
+    if (selectedLanguage) {
+        params.append('language', selectedLanguage);
+    }
+    if (selectedDuration) {
+        params.append('duration', selectedDuration);
+    }
+    if (selectedForm) {
+        params.append('studyFormat', selectedForm);
+    }
+    if (selectedDirection) {
+        params.append('fieldOfStudy', selectedDirection);
+    }
+    if (selectedGrade) {
+        params.append('grade', selectedGrade);
+    }
+    // Добавляем все выбранные университеты
+    selectedUniversities.forEach(uni => {
+        params.append('universityName', uni);
+    });
+
+    // Формируем URL для запроса
+    const url = `http://localhost:8080/api/v1/programs?${params.toString()}`;
+
+    console.log("Отправляем запрос на бэкенд:", url); // Очень полезно для отладки!
+
+    try {
+        const response = await fetch(url); // Отправляем GET-запрос
+
+        if (!response.ok) {
+            // Если сервер ответил ошибкой (404, 500 и т.д.)
+            console.error("Ошибка от сервера:", response.status, response.statusText);
+            programsContainer.innerHTML = '<p class="error">Произошла ошибка при загрузке данных.</p>';
+            return;
+        }
+
+        const programs = await response.json(); // Превращаем ответ в JSON-объект (массив)
+        console.log("Получены данные с бэкенда:", programs); // Полезно для отладки!
+
+        // 2. Отрисовываем полученные программы на странице
+        renderPrograms(programs);
+
+    } catch (error) {
+        // Если произошла сетевая ошибка (например, бэкенд не запущен)
+        console.error("Сетевая ошибка:", error);
+        programsContainer.innerHTML = '<p class="error">Не удалось подключиться к серверу. Убедитесь, что бэкенд запущен.</p>';
+    }
+}
+
+
+// // --- Логика авторизации для главной страницы ---
+// window.addEventListener('DOMContentLoaded', () => {
+//     const logged = localStorage.getItem('hogwarts_logged') === '1';
+//     const nav = document.querySelector('.header__nav');
+//     if (!nav) return;
+//     let loginBtn = nav.querySelector('.header__btn.login');
+//     let logoutBtn = nav.querySelector('.header__btn.logout');
+//     let profileIcon = nav.querySelector('.header__profile');
+//     if (loginBtn) loginBtn.remove();
+//     if (logoutBtn) logoutBtn.remove();
+//     if (profileIcon) profileIcon.remove();
+//     if (logged) {
+//         // Кнопка Выход
+//         const btn = document.createElement('button');
+//         btn.className = 'header__btn logout';
+//         btn.textContent = 'Выход';
+//         btn.onclick = () => {
+//             localStorage.removeItem('hogwarts_logged');
+//             window.location.reload();
+//         };
+//         nav.appendChild(btn);
+//         // Иконка профиля
+//         const icon = document.createElement('span');
+//         icon.className = 'header__profile';
+//         icon.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#007bff" stroke-width="2"/><path d="M4 20c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke="#007bff" stroke-width="2"/></svg>`;
+//         nav.appendChild(icon);
+//     } else {
+//         // Кнопка Вход
+//         const btn = document.createElement('button');
+//         btn.className = 'header__btn login';
+//         btn.textContent = 'Вход';
+//         btn.onclick = () => {
+//             window.location.href = 'login.html';
+//         };
+//         nav.appendChild(btn);
+//     }
+// });
+
+// --- ИЗМЕНЕНИЕ 3: ПРАВИЛЬНЫЙ ЗАПУСК ПРИЛОЖЕНИЯ ---
+
+// Главная точка входа
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Сначала скрываем все ненужное
+    filterCategories.forEach(b => b.classList.remove('active'));
+    filterOptions.classList.remove('active');
+    filterApplyBtn.style.display = 'none';
+    activeCategory = null;
+
+    // 2. Асинхронно загружаем данные для фильтров и ЖДЕМ их завершения
+    await loadFilterData();
+
+    // 3. Только после этого загружаем начальный список программ
+    await fetchPrograms();
+
+    // 4. Настраиваем кнопки авторизации (старый код)
+    setupAuthButtons();
+});
+
+// Вынесем старую логику авторизации в отдельную функцию для чистоты
+function setupAuthButtons() {
     const logged = localStorage.getItem('hogwarts_logged') === '1';
     const nav = document.querySelector('.header__nav');
     if (!nav) return;
@@ -507,4 +728,4 @@ window.addEventListener('DOMContentLoaded', () => {
         };
         nav.appendChild(btn);
     }
-}); 
+}
