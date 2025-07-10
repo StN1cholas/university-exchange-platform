@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — ПереДВИЖники</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo" id="headerLogo">
+            <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
+        </div>
+        <nav class="header__nav"></nav>
+    </header>
+    <main>
+        <section class="profile-section profile-section--wide">
+            <div class="profile-card profile-card--wide">
+                <div class="profile-left">
+                    <div class="profile-role" id="profileRole"></div>
+                    <div class="profile-photo" id="profilePhoto"></div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-edit-wrap">
+                        <button class="profile-edit-btn" id="editProfileBtn">Редактировать</button>
+                    </div>
+                    <div class="profile-name" id="profileName">—</div>
+                    <div class="profile-email" id="profileEmail">—</div>
+                    <div class="profile-field"><b>Университет:</b> <span id="profileUniversity">—</span></div>
+                    <div class="profile-field"><b>Подразделение:</b> <span id="profileDepartment">—</span></div>
+                    <div class="profile-field"><b>Уровень:</b> <span id="profileLevel">—</span></div>
+                    <div class="profile-field"><b>Направление:</b> <span id="profileDirection">—</span></div>
+                    <div class="profile-field"><b>Форма обучения:</b> <span id="profileForm">—</span></div>
+                    <div class="profile-field"><b>Курс:</b> <span id="profileCourse">—</span></div>
+                </div>
+            </div>
+        </section>
+        <section class="favorites-section">
+            <h2 class="favorites-title">Избранное</h2>
+            <div class="favorites-list">
+                <div class="favorite-card">
+                    <button class="favorite-remove" title="Удалить из избранного">&times;</button>
+                    <img class="favorite-univ-photo" src="univ1.jpg" alt="Фото вуза">
+                    <img class="favorite-univ-logo" src="univ1-logo.png" alt="Логотип вуза">
+                    <div class="favorite-univ-desc">Краткое описание вуза. Здесь пара предложений о вузе и его возможностях для студентов.</div>
+                    <div class="favorite-univ-actions">
+                        <button class="favorite-btn favorite-btn--more">Подробнее</button>
+                        <button class="favorite-btn favorite-btn--register">Регистрация</button>
+                    </div>
+                </div>
+                <div class="favorite-card">
+                    <button class="favorite-remove" title="Удалить из избранного">&times;</button>
+                    <img class="favorite-univ-photo" src="univ2.jpg" alt="Фото вуза">
+                    <img class="favorite-univ-logo" src="univ2-logo.png" alt="Логотип вуза">
+                    <div class="favorite-univ-desc">Второй университет. Современный кампус, международные программы, активная студенческая жизнь.</div>
+                    <div class="favorite-univ-actions">
+                        <button class="favorite-btn favorite-btn--more">Подробнее</button>
+                        <button class="favorite-btn favorite-btn--register">Регистрация</button>
+                    </div>
+                </div>
+                <div class="favorite-card">
+                    <button class="favorite-remove" title="Удалить из избранного">&times;</button>
+                    <img class="favorite-univ-photo" src="univ3.jpg" alt="Фото вуза">
+                    <img class="favorite-univ-logo" src="univ3-logo.png" alt="Логотип вуза">
+                    <div class="favorite-univ-desc">Третий вуз. Сильные инженерные направления, развитая инфраструктура, поддержка стартапов.</div>
+                    <div class="favorite-univ-actions">
+                        <button class="favorite-btn favorite-btn--more">Подробнее</button>
+                        <button class="favorite-btn favorite-btn--register">Регистрация</button>
+                    </div>
+                </div>
+                <div class="favorite-card">
+                    <button class="favorite-remove" title="Удалить из избранного">&times;</button>
+                    <img class="favorite-univ-photo" src="univ4.jpg" alt="Фото вуза">
+                    <img class="favorite-univ-logo" src="univ4-logo.png" alt="Логотип вуза">
+                    <div class="favorite-univ-desc">Четвёртый университет. Богатая история, сильные гуманитарные факультеты, обмен с зарубежными вузами.</div>
+                    <div class="favorite-univ-actions">
+                        <button class="favorite-btn favorite-btn--more">Подробнее</button>
+                        <button class="favorite-btn favorite-btn--register">Регистрация</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="applications-section">
+            <h2 class="applications-title">Мои заявки</h2>
+            <div class="applications-list">
+                <div class="application-card">
+                    <div class="application-info">
+                        <b>Вуз:</b> Университет N<br>
+                        <b>Программа:</b> Пример образовательной программы
+                    </div>
+                    <div class="application-actions">
+                        <button class="application-btn application-btn--edit">Редактировать</button>
+                        <button class="application-btn application-btn--view">Посмотреть</button>
+                    </div>
+                </div>
+                <div class="application-card">
+                    <div class="application-info">
+                        <b>Вуз:</b> Технологический университет<br>
+                        <b>Программа:</b> Инженерное дело и инновации
+                    </div>
+                    <div class="application-actions">
+                        <button class="application-btn application-btn--edit">Редактировать</button>
+                        <button class="application-btn application-btn--view">Посмотреть</button>
+                    </div>
+                </div>
+                <div class="application-card">
+                    <div class="application-info">
+                        <b>Вуз:</b> Гуманитарная академия<br>
+                        <b>Программа:</b> Международные отношения и языки
+                    </div>
+                    <div class="application-actions">
+                        <button class="application-btn application-btn--edit">Редактировать</button>
+                        <button class="application-btn application-btn--view">Посмотреть</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html> 
