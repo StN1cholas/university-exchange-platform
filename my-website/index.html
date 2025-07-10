@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПереДВИЖники — цифровая академическая платформа</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo" id="headerLogo">
+            <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
+        </div>
+        <nav class="header__nav">
+            <button class="header__btn">Вузы</button>
+            <button class="header__btn">Даты подачи заявлений</button>
+            <button class="header__icon" id="eyeButton" aria-label="Сменить режим/язык">
+                <img src="eye.jpg" alt="Глаз" width="28" height="28">
+            </button>
+        </nav>
+        <div class="header__dropdown" id="dropdownMenu">
+            <div class="dropdown__languages">
+                <button class="dropdown__lang">Русский</button>
+                <button class="dropdown__lang">English</button>
+            </div>
+            <button class="dropdown__vision">Версия для слабовидящих</button>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <img class="hero__img hero__img--broom" src="broom.png" alt="Фон ПереДВИЖников" />
+            <h1 class="hero__title">ПереДВИЖники</h1>
+        </section>
+        <section class="search-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Поиск программ...">
+            </div>
+            <div class="filter-header">
+                <h2 class="filter-main-title">Подбор направления</h2>
+            </div>
+            <div class="filter-categories" id="filterCategories">
+                <button class="filter-category" data-category="grade">Успеваемость</button>
+                <button class="filter-category" data-category="universities">Вуз</button>
+                <button class="filter-category" data-category="direction">Направление обучения</button>
+                <button class="filter-category" data-category="form">Форма обучения</button>
+                <button class="filter-category" data-category="language">Язык обучения</button>
+                <button class="filter-category" data-category="city">Город</button>
+                <button class="filter-category" data-category="duration">Продолжительность</button>
+                <button class="filter-category" data-category="course">Курс</button>
+            </div>
+            <div class="filter-dropdown always-visible" id="filterDropdown">
+                <div class="filter-options" id="filterOptions">
+                    <!-- Сюда будут подгружаться списки фильтров -->
+                </div>
+                <button class="filter-apply" id="filterApplyBtn">Принять</button>
+            </div>
+            <div class="selected-filters" id="selectedFilters">
+                <!-- Сюда будут выводиться выбранные фильтры -->
+            </div>
+        </section>
+        <section class="about about--wide">
+            <h2>О проекте</h2>
+            <p>«ПереДВИЖники» — цифровая академическая платформа для межвузовского обмена. Здесь вы можете найти подходящую программу, узнать сроки подачи заявлений и пройти все этапы зачисления онлайн.</p>
+            <p>Платформа объединяет ведущие вузы страны, облегчая процесс поиска и подачи документов для студентов и абитуриентов.</p>
+            <p>Мы стремимся сделать академическую мобильность доступной, удобной и прозрачной для всех участников образовательного процесса.</p>
+        </section>
+    </main>
+    <script src="script.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>
