@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Зарегистрироваться</title>
+    <title>Регистрация — ПереДВИЖники</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header class="header">
+        <div class="header__logo" id="headerLogo" style="cursor:pointer" onclick="window.location.href='index.html'">
+            <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
+        </div>
+        <nav class="header__nav">
+            <button class="header__btn" onclick="window.location.href='universities.html'">Вузы</button>
+            <button class="header__btn">Даты подачи заявлений</button>
+            <button class="header__icon" id="eyeButton" aria-label="Сменить режим/язык">
+                <img src="eye.jpg" alt="Глаз" width="28" height="28">
+            </button>
+        </nav>
+        <div class="header__dropdown" id="dropdownMenu">
+            <div class="dropdown__languages">
+                <button class="dropdown__lang">Русский</button>
+                <button class="dropdown__lang">English</button>
+            </div>
+            <button class="dropdown__vision">Версия для слабовидящих</button>
+        </div>
+    </header>
     <div class="auth-container">
         <form class="auth-form" id="registerForm">
             <h2 class="auth-title">Зарегистрироваться</h2>
@@ -25,6 +44,8 @@
             <button type="button" class="auth-link" id="toLogin">Войти</button>
         </form>
     </div>
+    <script src="script.js"></script>
+    <script src="profile.js"></script>
     <script src="auth.js"></script>
 </body>
 </html> 

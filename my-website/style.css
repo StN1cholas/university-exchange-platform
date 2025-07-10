@@ -20,6 +20,7 @@ body {
     z-index: 1000;
     padding: 0 32px;
     transition: background 0.2s;
+    box-sizing: border-box;
 }
 
 .header__logo {
@@ -29,16 +30,17 @@ body {
     letter-spacing: 2px;
     opacity: 1;
     transition: opacity 0.2s;
+    flex-shrink: 0;
 }
 
 .header__nav {
     display: flex;
     align-items: center;
     gap: 12px;
-    max-width: 100vw;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    overflow-x: auto;
+    flex: 1;
+    justify-content: flex-end;
+    overflow: visible;
+    flex-wrap: nowrap;
 }
 
 .header__btn {
@@ -51,6 +53,8 @@ body {
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 .header__btn:hover {
     background: #f0f4ff;
@@ -63,6 +67,7 @@ body {
     cursor: pointer;
     border-radius: 50%;
     transition: background 0.15s;
+    flex-shrink: 0;
 }
 .header__icon:hover {
     background: #f0f4ff;
@@ -129,6 +134,7 @@ main {
     margin-top: 80px;
 }
 
+/* --- Фон i.webp на всю секцию hero --- */
 .hero {
     position: relative;
     width: 100%;
@@ -138,39 +144,22 @@ main {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background-image: url('i.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-.hero__img {
+.hero::before {
+    content: '';
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.25;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: linear-gradient(120deg, #e0eaff 0%, #f7f8fa 100%);
+    opacity: 0.75;
     z-index: 1;
-}
-.hero__img--broom {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 70vw;
-    max-width: 700px;
-    height: auto;
-    opacity: 0.13;
-    filter: blur(4px);
-    transform: translate(-50%, -50%) rotate(-12deg);
-    z-index: 1;
-    pointer-events: none;
 }
 .hero__title {
     position: relative;
     z-index: 2;
-    font-size: 4rem;
-    color: var(--pastel-green);
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    text-align: center;
 }
 
 /* --- Градиентный фон для надписи ПереДВИЖники --- */
@@ -180,6 +169,24 @@ main {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+}
+
+/* --- Увеличенный и адаптивный шрифт для .hero__title --- */
+.hero__title {
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-align: center;
+}
+@media (max-width: 900px) {
+    .hero__title {
+        font-size: 3rem;
+    }
+}
+@media (max-width: 600px) {
+    .hero__title {
+        font-size: 2rem;
+    }
 }
 
 .about {
@@ -617,30 +624,86 @@ input[type=range].slider {
     width: 100vw;
     max-width: none;
 }
+/* --- Корректировка: подполя фильтра позиционируются абсолютно внутри блока фильтров --- */
+.filter-dropdown.always-visible {
+    position: relative;
+    width: 100vw;
+    max-width: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+/* --- Подполе фильтра фиксируется относительно окна --- */
 .filter-options {
     display: none;
     position: fixed;
     z-index: 1200;
-    margin: 0;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     padding: 16px 18px 24px 18px;
-    min-width: 0;
-    max-width: 98vw;
-    transition: left 0.15s, top 0.15s;
+    min-width: 240px;
+    max-width: 350px;
+    pointer-events: auto;
+    transition: opacity 0.15s;
+}
+@media (max-width: 600px) {
+    .filter-options {
+        position: static;
+        min-width: 0;
+        max-width: 98vw;
+        padding: 10px 4px 18px 4px;
+        box-shadow: none;
+    }
 }
 .filter-options.active {
     display: block;
 }
+/* --- Кнопка "Принять" смещена на половину длины вправо --- */
 .filter-apply {
     display: none;
+    position: absolute;
+    right: 60px;
+    bottom: -28px;
+    background: #bfa100;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: background 0.15s;
+    z-index: 1300;
 }
-.filter-dropdown.always-visible .filter-apply {
-    display: block;
-    margin: 0 0 0 auto;
-    margin-top: -16px;
-    margin-bottom: 8px;
+@media (max-width: 1100px) {
+    .filter-apply {
+        right: 28px;
+    }
+}
+@media (max-width: 900px) {
+    .filter-apply {
+        right: 8px;
+        padding: 10px 18px;
+        font-size: 1rem;
+        bottom: 8px;
+    }
+}
+@media (max-width: 600px) {
+    .filter-apply {
+        position: static;
+        width: 100%;
+        margin: 12px 0 0 0;
+        border-radius: 8px;
+        display: block;
+        background: #bfa100;
+    }
+    .filter-dropdown.always-visible {
+        min-height: 0;
+    }
 }
 @media (max-width: 900px) {
     .filter-header, .filter-dropdown.always-visible {
@@ -744,28 +807,45 @@ input[type=range].slider {
 .auth-title {
     color: var(--pastel-green) !important;
 }
+/* --- Темные фильтры и заголовки --- */
 .filter-category {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.35rem;
-    font-weight: 600;
+    background: #1b6e3a;
+    border: 2px solid #1b6e3a;
     color: #fff;
-    background: var(--pastel-green);
-    border: 2px solid var(--pastel-green);
-    border-radius: 24px;
-    min-height: 80px;
-    min-width: 0;
-    width: 100%;
-    transition: background 0.25s, color 0.25s, border 0.25s;
-    cursor: pointer;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-    letter-spacing: 0.5px;
 }
 .filter-category:hover, .filter-category.active {
-    background: var(--pastel-green-dark);
+    background: #145026;
+    border-color: #145026;
     color: #fff;
-    border-color: var(--pastel-green-dark);
+}
+/* --- Светло-темные фильтры и заголовки --- */
+.filter-category {
+    background: #357a4b;
+    border: 2px solid #357a4b;
+    color: #fff;
+}
+.filter-category:hover, .filter-category.active {
+    background: #25613a;
+    border-color: #25613a;
+    color: #fff;
+}
+/* --- Ещё более светлый основной цвет фильтров и заголовков --- */
+.filter-category {
+    background: #4caf6d;
+    border: 2px solid #4caf6d;
+    color: #fff;
+}
+.filter-category:hover, .filter-category.active {
+    background: #25613a;
+    border-color: #25613a;
+    color: #fff;
+}
+.filter-main-title,
+.filter-title,
+.about h2,
+.about--wide h2,
+.filter-header h2 {
+    color: #4caf6d !important;
 }
 .auth-checkboxes {
     display: flex;
@@ -887,6 +967,25 @@ input[type=range].slider {
     color: #888;
     margin-bottom: 2px;
 }
+
+.profile-field {
+    font-size: 1.05rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.profile-field b {
+    color: #25613a;
+    font-weight: 600;
+}
+
+/* Скрытие полей по умолчанию */
+.student-field,
+.university-field {
+    display: none;
+}
+
 .profile-edit-form {
     background: #fff;
     border-radius: 18px;
@@ -968,10 +1067,10 @@ input[type=range].slider {
     display: flex;
     align-items: center;
     gap: 12px;
-    max-width: 100vw;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    overflow-x: auto;
+    flex: 1;
+    justify-content: flex-end;
+    overflow: visible;
+    flex-wrap: nowrap;
 }
 @media (max-width: 900px) {
     .header__nav {
@@ -983,7 +1082,6 @@ input[type=range].slider {
     .header__nav {
         gap: 4px;
         padding-right: 0;
-        max-width: 98vw;
     }
     .header__btn, .header__icon {
         font-size: 0.95rem;
@@ -1047,42 +1145,38 @@ input[type=range].slider {
     flex-wrap: wrap;
     gap: 32px;
 }
+/* --- Обновлённый шаблон карточки вуза в Избранном --- */
 .favorite-card {
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     padding: 24px 20px 18px 20px;
-    width: 320px;
+    width: 240px;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     transition: box-shadow 0.18s;
 }
-.favorite-card:hover {
-    box-shadow: 0 6px 24px rgba(30,110,58,0.10);
-}
-.favorite-univ-photo {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 10px;
-}
 .favorite-univ-logo {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     background: #f0f4ff;
     border-radius: 50%;
-    padding: 6px;
+    padding: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
-.favorite-univ-desc {
+.favorite-univ-desc--left {
     font-size: 1.05rem;
     color: #333;
-    text-align: center;
-    margin-bottom: 14px;
+    text-align: left;
+    margin-bottom: 18px;
+    width: 100%;
+    word-break: break-word;
 }
 .favorite-univ-actions {
     display: flex;
@@ -1091,7 +1185,7 @@ input[type=range].slider {
     justify-content: center;
 }
 .favorite-btn {
-    background: var(--pastel-green);
+    background: linear-gradient(90deg, #25613a 0%, #ffe066 100%);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -1099,16 +1193,31 @@ input[type=range].slider {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.18s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: background 0.18s, color 0.18s;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.favorite-btn:hover {
+    background: linear-gradient(90deg, #145026 0%, #ffe066 100%);
+    color: #fff;
+}
+/* --- Кнопка Подробнее: градиент от тёмно-зелёного к светло-зелёному --- */
+.favorite-btn--more {
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%) !important;
+    color: #fff;
 }
 .favorite-btn--more:hover {
-    background: #1b6e3a;
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%) !important;
+    color: #fff;
 }
+/* --- Кнопка Регистрация: градиент от тёмно-жёлтого к светло-жёлтому --- */
 .favorite-btn--register {
-    background: #007bff;
+    background: linear-gradient(90deg, #bfa100 0%, #ffe066 100%) !important;
+    color: #fff;
 }
 .favorite-btn--register:hover {
-    background: #0056b3;
+    background: linear-gradient(90deg, #8c7300 0%, #ffe066 100%) !important;
+    color: #fff;
 }
 
 /* --- Секция Мои заявки --- */
@@ -1168,14 +1277,21 @@ input[type=range].slider {
     cursor: pointer;
     transition: background 0.18s;
 }
+.application-btn--edit {
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%) !important;
+    color: #fff;
+}
 .application-btn--edit:hover {
-    background: #1b6e3a;
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%) !important;
+    color: #fff;
 }
 .application-btn--view {
-    background: #007bff;
+    background: linear-gradient(90deg, #bfa100 0%, #ffe066 100%) !important;
+    color: #fff;
 }
 .application-btn--view:hover {
-    background: #0056b3;
+    background: linear-gradient(90deg, #8c7300 0%, #ffe066 100%) !important;
+    color: #fff;
 }
 
 @media (max-width: 1100px) {
@@ -1279,5 +1395,499 @@ input[type=range].slider {
 @media (max-width: 600px) {
     .favorites-list, .applications-list {
         grid-template-columns: 1fr;
+    }
+}
+
+/* --- Список вузов (universities.html) --- */
+.universities-section {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 auto 32px auto;
+    padding: 0 4vw;
+    box-sizing: border-box;
+}
+.universities-title {
+    font-size: 2.2rem;
+    color: var(--pastel-green-dark);
+    margin-bottom: 24px;
+    font-weight: 800;
+    text-align: center;
+}
+.universities-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.university-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 18px 16px 14px 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    height: 180px;
+    position: relative;
+    transition: box-shadow 0.18s;
+}
+.university-card:hover {
+    box-shadow: 0 6px 24px rgba(30,110,58,0.10);
+}
+.university-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    max-width: 90px;
+    margin-right: 18px;
+    flex-shrink: 0;
+}
+.university-logo {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    background: #f0f4ff;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    padding: 4px;
+}
+.university-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1b6e3a;
+    text-align: center;
+}
+.university-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+}
+.university-desc {
+    font-size: 0.98rem;
+    color: #333;
+    margin-bottom: 14px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.university-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+.university-btn {
+    background: var(--pastel-green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.97rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.university-btn--more {
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%) !important;
+    color: #fff;
+}
+.university-btn--more:hover {
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%) !important;
+    color: #fff;
+}
+.university-btn--programs {
+    background: linear-gradient(90deg, #bfa100 0%, #ffe066 100%) !important;
+    color: #fff;
+}
+.university-btn--programs:hover {
+    background: linear-gradient(90deg, #8c7300 0%, #ffe066 100%) !important;
+    color: #fff;
+}
+@media (max-width: 1100px) {
+    .universities-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 800px) {
+    .universities-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .university-card {
+        height: auto;
+        min-height: 120px;
+    }
+}
+@media (max-width: 600px) {
+    .universities-list {
+        grid-template-columns: 1fr;
+    }
+    .universities-section {
+        padding: 0 2vw;
+    }
+    .university-card {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+        min-height: 120px;
+    }
+    .university-label {
+        flex-direction: row;
+        align-items: center;
+        margin-right: 0;
+        margin-bottom: 10px;
+        max-width: none;
+    }
+    .university-logo {
+        margin-bottom: 0;
+        margin-right: 10px;
+    }
+    .university-name {
+        text-align: left;
+    }
+}
+/* --- Контейнер для каждой кнопки фильтра --- */
+.filter-category-wrap {
+    position: relative;
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+}
+.feedback-section {
+    max-width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 40px 0 0 0;
+    padding: 40px 8vw;
+    font-size: 1.25rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+@media (max-width: 900px) {
+    .feedback-section {
+        padding: 24px 2vw;
+    }
+}
+@media (max-width: 600px) {
+    .feedback-section {
+        padding: 12px 2vw;
+        font-size: 1.05rem;
+    }
+}
+.feedback-section .feedback-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 32px 24px 36px 24px;
+}
+.feedback-title {
+    color: #4caf6d;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+.feedback-form {
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 24px 18px 18px 18px;
+    box-shadow: 0 2px 8px rgba(30,110,58,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 8px;
+}
+.feedback-question {
+    font-size: 1.08rem;
+    color: #25613a;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+.feedback-input, .feedback-textarea {
+    width: 100%;
+    border: 1px solid #e0eaff;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    background: #fff;
+    resize: vertical;
+    min-height: 38px;
+    margin-bottom: 8px;
+}
+.feedback-textarea {
+    min-height: 60px;
+    max-height: 180px;
+}
+.feedback-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.feedback-form .feedback-submit {
+    align-self: flex-end;
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.18s;
+}
+.feedback-form .feedback-submit:hover {
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%);
+}
+.feedback-welcome {
+    font-size: 1.13rem;
+    color: #333;
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 24px 18px;
+    margin-top: 8px;
+    text-align: left;
+}
+@media (max-width: 700px) {
+    .feedback-section {
+        max-width: 98vw;
+        padding: 18px 4vw 24px 4vw;
+    }
+    .feedback-section .feedback-inner {
+        padding: 18px 6px 24px 6px;
+    }
+}
+
+/* --- Секция Откликнувшиеся студенты --- */
+.students-section {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 auto 32px auto;
+    padding: 0 4vw;
+    box-sizing: border-box;
+}
+.students-title {
+    font-size: 2rem;
+    color: var(--pastel-green-dark);
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+.students-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* --- Секция Хантинг --- */
+.hunting-section {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 auto 32px auto;
+    padding: 0 4vw;
+    box-sizing: border-box;
+}
+.hunting-title {
+    font-size: 2rem;
+    color: var(--pastel-green-dark);
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+.hunting-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* --- Карточка студента --- */
+.student-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    transition: box-shadow 0.18s;
+    position: relative;
+}
+.student-card:hover {
+    box-shadow: 0 6px 24px rgba(30,110,58,0.10);
+}
+
+/* --- Фото студента --- */
+.student-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f0f4ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.student-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.student-photo-placeholder {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #bbb;
+}
+
+/* --- Информация о студенте --- */
+.student-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+}
+.student-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #25613a;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+.student-details {
+    margin-bottom: 16px;
+}
+.student-university {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+.student-course {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 4px;
+}
+.student-direction {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+.student-target {
+    font-size: 0.9rem;
+    color: #25613a;
+    font-weight: 600;
+    background: #f0f4ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* --- Кнопки действий --- */
+.student-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.student-btn {
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.student-btn:hover {
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%);
+}
+.student-btn--more {
+    background: linear-gradient(90deg, #25613a 0%, #4caf6d 100%);
+}
+.student-btn--more:hover {
+    background: linear-gradient(90deg, #145026 0%, #357a4b 100%);
+}
+.student-btn--accept {
+    background: linear-gradient(90deg, #bfa100 0%, #ffe066 100%);
+}
+.student-btn--accept:hover {
+    background: linear-gradient(90deg, #8c7300 0%, #ffe066 100%);
+}
+.student-btn--invite {
+    background: linear-gradient(90deg, #bfa100 0%, #ffe066 100%);
+}
+.student-btn--invite:hover {
+    background: linear-gradient(90deg, #8c7300 0%, #ffe066 100%);
+}
+
+/* --- Адаптивность для карточек студентов --- */
+@media (max-width: 1100px) {
+    .students-list, .hunting-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+}
+@media (max-width: 800px) {
+    .students-list, .hunting-list {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .student-card {
+        padding: 16px;
+    }
+    .student-photo {
+        width: 70px;
+        height: 70px;
+    }
+    .student-name {
+        font-size: 1.1rem;
+    }
+}
+@media (max-width: 600px) {
+    .students-section, .hunting-section {
+        padding: 0 2vw;
+    }
+    .student-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 16px 12px;
+    }
+    .student-photo {
+        margin-bottom: 12px;
+    }
+    .student-actions {
+        justify-content: center;
+        width: 100%;
+    }
+    .student-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+.section-cat {
+    height: 96px;
+    vertical-align: middle;
+    margin-left: 16px;
+}
+@media (max-width: 600px) {
+    .section-cat {
+        height: 64px;
+        margin-left: 8px;
     }
 }

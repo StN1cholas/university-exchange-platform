@@ -18,6 +18,21 @@ function getProfilePhotoHTML(photo) {
         return `<svg width="64" height="64" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#bbb" stroke-width="2"/><path d="M4 20c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke="#bbb" stroke-width="2"/></svg>`;
     }
 }
+
+// Функция для показа/скрытия полей в зависимости от роли
+function toggleFieldsByRole(role) {
+    const studentFields = document.querySelectorAll('.student-field');
+    const universityFields = document.querySelectorAll('.university-field');
+    
+    if (role === 'student') {
+        studentFields.forEach(field => field.style.display = 'block');
+        universityFields.forEach(field => field.style.display = 'none');
+    } else if (role === 'university') {
+        studentFields.forEach(field => field.style.display = 'none');
+        universityFields.forEach(field => field.style.display = 'block');
+    }
+}
+
 function renderHeaderNav() {
     const nav = document.querySelector('.header__nav');
     if (!nav) return;
@@ -26,6 +41,7 @@ function renderHeaderNav() {
     const btnUniv = document.createElement('button');
     btnUniv.className = 'header__btn';
     btnUniv.textContent = 'Вузы';
+    btnUniv.onclick = () => { window.location.href = 'universities.html'; };
     nav.appendChild(btnUniv);
     const btnDates = document.createElement('button');
     btnDates.className = 'header__btn';
@@ -47,6 +63,7 @@ function renderHeaderNav() {
     };
     nav.appendChild(logoutBtn);
 }
+
 // --- Профиль ---
 if (document.getElementById('profileRole')) {
     const user = getUser();
@@ -54,30 +71,57 @@ if (document.getElementById('profileRole')) {
     document.getElementById('profilePhoto').innerHTML = getProfilePhotoHTML(user.photo);
     document.getElementById('profileName').textContent = user.name || '—';
     document.getElementById('profileEmail').textContent = user.email || '—';
+    
+    // Показываем/скрываем поля в зависимости от роли
+    toggleFieldsByRole(user.role);
+    
+    // Заполняем поля для студента
+    document.getElementById('profileGender').textContent = user.gender || '—';
     document.getElementById('profileUniversity').textContent = user.university || '—';
     document.getElementById('profileDepartment').textContent = user.department || '—';
     document.getElementById('profileLevel').textContent = user.level || '—';
     document.getElementById('profileDirection').textContent = user.direction || '—';
     document.getElementById('profileForm').textContent = user.form || '—';
     document.getElementById('profileCourse').textContent = user.course || '—';
+    
+    // Заполняем поля для представителя вуза
+    document.getElementById('profileGenderUniv').textContent = user.gender || '—';
+    document.getElementById('profilePosition').textContent = user.position || '—';
+    document.getElementById('profileRepresentedUniversity').textContent = user.representedUniversity || '—';
+    
     document.getElementById('editProfileBtn').onclick = () => {
         window.location.href = 'edit-profile.html';
     };
 }
+
 // --- Редактирование профиля ---
 if (document.getElementById('profileEditForm')) {
     const user = getUser();
+    
+    // Показываем/скрываем поля в зависимости от роли
+    toggleFieldsByRole(user.role);
+    
     // Заполнение полей
     document.getElementById('editName').value = user.name || '';
+    
+    // Поля для студента
+    document.getElementById('editGender').value = user.gender || '';
     document.getElementById('editUniversity').value = user.university || '';
     document.getElementById('editDepartment').value = user.department || '';
     document.getElementById('editLevel').value = user.level || '';
     document.getElementById('editDirection').value = user.direction || '';
     document.getElementById('editForm').value = user.form || '';
     document.getElementById('editCourse').value = user.course || '';
+    
+    // Поля для представителя вуза
+    document.getElementById('editGenderUniv').value = user.gender || '';
+    document.getElementById('editPosition').value = user.position || '';
+    document.getElementById('editRepresentedUniversity').value = user.representedUniversity || '';
+    
     if (user.photo) {
         document.getElementById('editProfilePhoto').innerHTML = `<img src="${user.photo}" alt="Фото профиля">`;
     }
+    
     // Загрузка фото
     document.getElementById('editPhotoInput').onchange = function(e) {
         const file = e.target.files[0];
@@ -90,24 +134,36 @@ if (document.getElementById('profileEditForm')) {
             reader.readAsDataURL(file);
         }
     };
+    
     // Сохранить
     document.getElementById('profileEditForm').onsubmit = function(e) {
         e.preventDefault();
         user.name = document.getElementById('editName').value;
-        user.university = document.getElementById('editUniversity').value;
-        user.department = document.getElementById('editDepartment').value;
-        user.level = document.getElementById('editLevel').value;
-        user.direction = document.getElementById('editDirection').value;
-        user.form = document.getElementById('editForm').value;
-        user.course = document.getElementById('editCourse').value;
+        
+        if (user.role === 'student') {
+            user.gender = document.getElementById('editGender').value;
+            user.university = document.getElementById('editUniversity').value;
+            user.department = document.getElementById('editDepartment').value;
+            user.level = document.getElementById('editLevel').value;
+            user.direction = document.getElementById('editDirection').value;
+            user.form = document.getElementById('editForm').value;
+            user.course = document.getElementById('editCourse').value;
+        } else if (user.role === 'university') {
+            user.gender = document.getElementById('editGenderUniv').value;
+            user.position = document.getElementById('editPosition').value;
+            user.representedUniversity = document.getElementById('editRepresentedUniversity').value;
+        }
+        
         setUser(user);
         window.location.href = 'profile.html';
     };
+    
     // Назад
     document.getElementById('profileBackBtn').onclick = function() {
         window.location.href = 'profile.html';
     };
 }
+
 // Для profile.html и edit-profile.html
 if (window.location.pathname.endsWith('profile.html') || window.location.pathname.endsWith('edit-profile.html')) {
     window.addEventListener('DOMContentLoaded', renderHeaderNav);
@@ -118,6 +174,7 @@ if (window.location.pathname.endsWith('profile.html') || window.location.pathnam
         logo.onclick = () => { window.location.href = 'index.html'; };
     }
 }
+
 // --- Кнопка Личный кабинет в шапке (главная) ---
 window.addEventListener('DOMContentLoaded', () => {
     const logged = localStorage.getItem('hogwarts_logged') === '1';

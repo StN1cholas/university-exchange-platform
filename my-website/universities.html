@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вузы — ПереДВИЖники</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo" id="headerLogo" style="cursor:pointer" onclick="window.location.href='index.html'">
+            <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
+        </div>
+        <nav class="header__nav">
+            <button class="header__btn" onclick="window.location.href='universities.html'">Вузы</button>
+            <button class="header__btn">Даты подачи заявлений</button>
+            <button class="header__icon" id="eyeButton" aria-label="Сменить режим/язык">
+                <img src="eye.jpg" alt="Глаз" width="28" height="28">
+            </button>
+        </nav>
+        <div class="header__dropdown" id="dropdownMenu">
+            <div class="dropdown__languages">
+                <button class="dropdown__lang">Русский</button>
+                <button class="dropdown__lang">English</button>
+            </div>
+            <button class="dropdown__vision">Версия для слабовидящих</button>
+        </div>
+    </header>
+    <main>
+        <section class="universities-section">
+            <h1 class="universities-title">Список вузов</h1>
+            <div class="universities-list">
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ1-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Университет N</div>
+                        <div class="university-desc">Крупный федеральный университет с развитой инфраструктурой, международными программами и активной студенческой жизнью.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ2-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Технологический университет</div>
+                        <div class="university-desc">Современный кампус, сильные инженерные направления, поддержка стартапов и инноваций.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ3-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Гуманитарная академия</div>
+                        <div class="university-desc">Сильные гуманитарные факультеты, международные обмены, развитая культурная жизнь.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ4-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Медицинский университет</div>
+                        <div class="university-desc">Передовые медицинские исследования, клиническая база, международные стажировки.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ5-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Аграрный университет</div>
+                        <div class="university-desc">Сельскохозяйственные и экологические программы, практика на базе ведущих предприятий отрасли.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ6-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Педагогический университет</div>
+                        <div class="university-desc">Подготовка педагогов, современные образовательные технологии, международные практики.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ7-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Экономический университет</div>
+                        <div class="university-desc">Экономика, финансы, бизнес-образование, стажировки в компаниях-партнёрах.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="university-card">
+                    <div class="university-label">
+                        <img src="univ8-logo.png" alt="Логотип вуза" class="university-logo">
+                    </div>
+                    <div class="university-info">
+                        <div class="university-name">Архитектурная академия</div>
+                        <div class="university-desc">Архитектура, дизайн, урбанистика, творческие мастерские и международные конкурсы.</div>
+                        <div class="university-actions">
+                            <button class="university-btn university-btn--more">Подробнее</button>
+                            <button class="university-btn university-btn--programs">Программы</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html> 

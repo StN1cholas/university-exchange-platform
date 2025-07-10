@@ -62,7 +62,32 @@ if (document.getElementById('registerForm')) {
             regError.textContent = 'Выберите роль';
             return;
         }
-        localStorage.setItem('hogwarts_user', JSON.stringify({ email, password, role }));
+        
+        // Создаем базовый профиль пользователя
+        const user = { 
+            email, 
+            password, 
+            role,
+            name: '',
+            photo: null
+        };
+        
+        // Добавляем поля в зависимости от роли
+        if (role === 'student') {
+            user.gender = '';
+            user.university = '';
+            user.department = '';
+            user.level = '';
+            user.direction = '';
+            user.form = '';
+            user.course = '';
+        } else if (role === 'university') {
+            user.gender = '';
+            user.position = '';
+            user.representedUniversity = '';
+        }
+        
+        localStorage.setItem('hogwarts_user', JSON.stringify(user));
         localStorage.setItem('hogwarts_logged', '1');
         window.location.href = 'index.html';
     };

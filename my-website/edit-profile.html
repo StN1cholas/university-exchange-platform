@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <div class="header__logo" id="headerLogo">
-            <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
+            <img src="broom.png" alt="Эмблема ПереДВИЖники" class="header__broom">
         </div>
         <nav class="header__nav"></nav>
     </header>
@@ -22,21 +22,28 @@
                     <input type="file" id="editPhotoInput" accept="image/*">
                 </div>
                 <input type="text" class="profile-edit-input" id="editName" placeholder="ФИО">
-                <input type="text" class="profile-edit-input" id="editUniversity" placeholder="Университет">
-                <input type="text" class="profile-edit-input" id="editDepartment" placeholder="Учебное подразделение">
-                <select class="profile-edit-input" id="editLevel">
+                
+                <!-- Поля для студента -->
+                <select class="profile-edit-input student-field" id="editGender">
+                    <option value="">Пол</option>
+                    <option value="Мужской">Мужской</option>
+                    <option value="Женский">Женский</option>
+                </select>
+                <input type="text" class="profile-edit-input student-field" id="editUniversity" placeholder="Университет">
+                <input type="text" class="profile-edit-input student-field" id="editDepartment" placeholder="Учебное подразделение">
+                <select class="profile-edit-input student-field" id="editLevel">
                     <option value="">Уровень подготовки</option>
                     <option value="Бакалавр">Бакалавр</option>
                     <option value="Магистр">Магистр</option>
                     <option value="Специалист">Специалист</option>
                 </select>
-                <input type="text" class="profile-edit-input" id="editDirection" placeholder="Направление подготовки (номер и название)">
-                <select class="profile-edit-input" id="editForm">
+                <input type="text" class="profile-edit-input student-field" id="editDirection" placeholder="Направление подготовки (номер и название)">
+                <select class="profile-edit-input student-field" id="editForm">
                     <option value="">Форма обучения</option>
                     <option value="Очная">Очная</option>
                     <option value="Заочная">Заочная</option>
                 </select>
-                <select class="profile-edit-input" id="editCourse">
+                <select class="profile-edit-input student-field" id="editCourse">
                     <option value="">Курс</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -44,6 +51,16 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+                
+                <!-- Поля для представителя вуза -->
+                <select class="profile-edit-input university-field" id="editGenderUniv">
+                    <option value="">Пол</option>
+                    <option value="Мужской">Мужской</option>
+                    <option value="Женский">Женский</option>
+                </select>
+                <input type="text" class="profile-edit-input university-field" id="editPosition" placeholder="Должность">
+                <input type="text" class="profile-edit-input university-field" id="editRepresentedUniversity" placeholder="Представляемый вуз">
+                
                 <div class="profile-edit-btns">
                     <button type="button" class="auth-btn profile-back-btn" id="profileBackBtn">Назад</button>
                     <button type="submit" class="auth-btn profile-save-btn">Сохранить</button>

@@ -37,6 +37,15 @@ const filterOptions = document.getElementById('filterOptions');
 const filterApplyBtn = document.getElementById('filterApplyBtn');
 const selectedFilters = document.getElementById('selectedFilters');
 let activeCategory = null;
+let filterOptionsAnchorBtn = null;
+let filterOptionsEl = null;
+
+function closeAllFilterOptions() {
+    document.querySelectorAll('.filter-options').forEach(el => el.remove());
+    document.querySelectorAll('.filter-category').forEach(btn => btn.classList.remove('active'));
+    filterOptionsAnchorBtn = null;
+    activeCategory = null;
+}
 
 // Пример данных для фильтра
 const universitiesList = [
@@ -76,8 +85,9 @@ const courseOptions = [
 ];
 let selectedCourse = null;
 
-function renderFilterOptions(category) {
-    filterOptions.innerHTML = '';
+function renderFilterOptions(category, container) {
+    const el = container || filterOptions;
+    el.innerHTML = '';
     if (category === 'grade') {
         // Ползунок успеваемости
         const sliderWrap = document.createElement('div');
@@ -107,7 +117,7 @@ function renderFilterOptions(category) {
             labels.appendChild(label);
         }
         sliderWrap.appendChild(labels);
-        filterOptions.appendChild(sliderWrap);
+        el.appendChild(sliderWrap);
     } else if (category === 'universities') {
         // Поиск по вузам
         let prevActive = document.activeElement;
@@ -123,9 +133,9 @@ function renderFilterOptions(category) {
         search.value = universitySearch;
         search.oninput = (e) => {
             universitySearch = e.target.value;
-            renderFilterOptions('universities');
+            renderFilterOptions('universities', el);
         };
-        filterOptions.appendChild(search);
+        el.appendChild(search);
         // Восстановление фокуса и позиции курсора
         setTimeout(() => {
             if (document.activeElement !== search) {
@@ -146,9 +156,9 @@ function renderFilterOptions(category) {
             } else {
                 selectedUniversities = [...universitiesList];
             }
-            renderFilterOptions('universities');
+            renderFilterOptions('universities', el);
         };
-        filterOptions.appendChild(allOption);
+        el.appendChild(allOption);
         // Список вузов
         filtered.forEach(u => {
             const option = document.createElement('div');
@@ -166,9 +176,9 @@ function renderFilterOptions(category) {
                 } else {
                     selectedUniversities.push(u);
                 }
-                renderFilterOptions('universities');
+                renderFilterOptions('universities', el);
             };
-            filterOptions.appendChild(option);
+            el.appendChild(option);
         });
     } else if (category === 'direction') {
         // Направления обучения: вертикальный список
@@ -178,9 +188,9 @@ function renderFilterOptions(category) {
             item.textContent = dir;
             item.onclick = () => {
                 selectedDirection = selectedDirection === dir ? null : dir;
-                renderFilterOptions('direction');
+                renderFilterOptions('direction', el);
             };
-            filterOptions.appendChild(item);
+            el.appendChild(item);
         });
     } else if (category === 'form') {
         // Форма обучения
@@ -192,11 +202,11 @@ function renderFilterOptions(category) {
             btn.textContent = form;
             btn.onclick = () => {
                 selectedForm = selectedForm === form ? null : form;
-                renderFilterOptions('form');
+                renderFilterOptions('form', el);
             };
             group.appendChild(btn);
         });
-        filterOptions.appendChild(group);
+        el.appendChild(group);
     } else if (category === 'language') {
         // Язык обучения
         const group = document.createElement('div');
@@ -207,11 +217,11 @@ function renderFilterOptions(category) {
             btn.textContent = lang;
             btn.onclick = () => {
                 selectedLanguage = selectedLanguage === lang ? null : lang;
-                renderFilterOptions('language');
+                renderFilterOptions('language', el);
             };
             group.appendChild(btn);
         });
-        filterOptions.appendChild(group);
+        el.appendChild(group);
     } else if (category === 'city') {
         // Поиск по городам
         let prevActive = document.activeElement;
@@ -227,9 +237,9 @@ function renderFilterOptions(category) {
         search.value = citySearch;
         search.oninput = (e) => {
             citySearch = e.target.value;
-            renderFilterOptions('city');
+            renderFilterOptions('city', el);
         };
-        filterOptions.appendChild(search);
+        el.appendChild(search);
         // Восстановление фокуса и позиции курсора
         setTimeout(() => {
             if (document.activeElement !== search) {
@@ -249,11 +259,11 @@ function renderFilterOptions(category) {
             item.textContent = city;
             item.onclick = () => {
                 selectedCity = selectedCity === city ? null : city;
-                renderFilterOptions('city');
+                renderFilterOptions('city', el);
             };
             list.appendChild(item);
         });
-        filterOptions.appendChild(list);
+        el.appendChild(list);
     } else if (category === 'duration') {
         // Продолжительность
         const group = document.createElement('div');
@@ -264,11 +274,11 @@ function renderFilterOptions(category) {
             btn.textContent = dur;
             btn.onclick = () => {
                 selectedDuration = selectedDuration === dur ? null : dur;
-                renderFilterOptions('duration');
+                renderFilterOptions('duration', el);
             };
             group.appendChild(btn);
         });
-        filterOptions.appendChild(group);
+        el.appendChild(group);
     } else if (category === 'course') {
         // Курс: вертикальный список
         courseOptions.forEach(group => {
@@ -276,16 +286,16 @@ function renderFilterOptions(category) {
             groupLabel.style.fontWeight = 'bold';
             groupLabel.style.margin = '8px 0 4px 0';
             groupLabel.textContent = group.group;
-            filterOptions.appendChild(groupLabel);
+            el.appendChild(groupLabel);
             group.values.forEach(val => {
                 const item = document.createElement('div');
                 item.className = 'filter-city-item' + (selectedCourse === val ? ' selected' : '');
                 item.textContent = val;
                 item.onclick = () => {
                     selectedCourse = selectedCourse === val ? null : val;
-                    renderFilterOptions('course');
+                    renderFilterOptions('course', el);
                 };
-                filterOptions.appendChild(item);
+                el.appendChild(item);
             });
         });
     } else {
@@ -293,57 +303,79 @@ function renderFilterOptions(category) {
         const stub = document.createElement('div');
         stub.className = 'filter-option';
         stub.textContent = 'Скоро будет...';
-        filterOptions.appendChild(stub);
+        el.appendChild(stub);
     }
 }
 
 // Переключение категорий фильтра
 filterCategories.forEach(btn => {
     btn.addEventListener('click', () => {
+        const wrap = btn.parentElement;
         if (btn.classList.contains('active')) {
             // Если уже активен — скрыть подполя
-            btn.classList.remove('active');
-            filterOptions.classList.remove('active');
+            closeAllFilterOptions();
             filterApplyBtn.style.display = 'none';
-            activeCategory = null;
             return;
         }
-        filterCategories.forEach(b => b.classList.remove('active'));
+        closeAllFilterOptions();
         btn.classList.add('active');
         activeCategory = btn.dataset.category;
-        renderFilterOptions(activeCategory);
-        filterOptions.classList.add('active');
+        // Создаём filterOptions внутри wrap
+        filterOptionsEl = document.createElement('div');
+        filterOptionsEl.className = 'filter-options active';
+        filterOptionsEl.style.display = 'block';
+        filterOptionsEl.style.visibility = 'hidden';
+        wrap.appendChild(filterOptionsEl);
+        renderFilterOptions(activeCategory, filterOptionsEl);
         filterApplyBtn.style.display = 'block';
-        // Позиционируем filterOptions под кнопкой относительно окна
-        setTimeout(() => {
-            const btnRect = btn.getBoundingClientRect();
-            const filterWidth = filterOptions.offsetWidth;
-            let left = btnRect.left + btnRect.width / 2 - filterWidth / 2;
-            let top = btnRect.bottom + 8;
-            // Защита от выхода за пределы экрана
-            if (left < 8) left = 8;
-            if (left + filterWidth > window.innerWidth - 8) left = window.innerWidth - filterWidth - 8;
-            filterOptions.style.left = left + 'px';
-            filterOptions.style.top = top + 'px';
-            filterOptions.style.transform = '';
-        }, 0);
+        filterOptionsAnchorBtn = btn;
+        // После рендера — позиционируем и показываем
+        requestAnimationFrame(() => {
+            positionFilterOptions();
+            filterOptionsEl.style.visibility = 'visible';
+        });
     });
 });
+
+function positionFilterOptions() {
+    if (!filterOptionsAnchorBtn || !filterOptionsEl || !filterOptionsEl.classList.contains('active')) return;
+    // На мобильных — не позиционируем
+    if (window.innerWidth < 600) {
+        filterOptionsEl.style.left = '';
+        filterOptionsEl.style.top = '';
+        filterOptionsEl.style.transform = '';
+        return;
+    }
+    const btn = filterOptionsAnchorBtn;
+    const btnRect = btn.getBoundingClientRect();
+    const filterWidth = filterOptionsEl.offsetWidth;
+    // top — нижняя граница кнопки относительно окна
+    let top = btnRect.bottom;
+    // left — центрируем относительно кнопки
+    let left = btnRect.left + btnRect.width / 2 - filterWidth / 2;
+    // Защита от выхода за пределы окна
+    if (left < 8) left = 8;
+    if (left + filterWidth > window.innerWidth - 8) left = window.innerWidth - filterWidth - 8;
+    filterOptionsEl.style.left = left + 'px';
+    filterOptionsEl.style.top = top + 'px';
+    filterOptionsEl.style.transform = '';
+}
+
+window.addEventListener('scroll', positionFilterOptions);
+window.addEventListener('resize', positionFilterOptions);
 
 // При загрузке все подполя скрыты
 window.addEventListener('DOMContentLoaded', () => {
     filterCategories.forEach(b => b.classList.remove('active'));
-    filterOptions.classList.remove('active');
+    filterOptionsEl = null; // Убедимся, что filterOptionsEl не создан
     filterApplyBtn.style.display = 'none';
     activeCategory = null;
 });
 
 // Кнопка 'Принять' скрывает подполя
 filterApplyBtn.addEventListener('click', () => {
-    filterOptions.classList.remove('active');
+    closeAllFilterOptions();
     filterApplyBtn.style.display = 'none';
-    filterCategories.forEach(b => b.classList.remove('active'));
-    activeCategory = null;
     renderSelectedFilters();
 });
 
@@ -506,5 +538,58 @@ window.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'login.html';
         };
         nav.appendChild(btn);
+    }
+    // --- Кнопка Вузы в шапке ---
+    const navHeader = document.querySelector('.header__nav');
+    if (navHeader) {
+        const btns = navHeader.querySelectorAll('.header__btn');
+        if (btns.length > 0) {
+            btns[0].onclick = () => {
+                window.location.href = 'universities.html';
+            };
+        }
+    }
+    const feedbackContent = document.getElementById('feedbackContent');
+    if (feedbackContent) {
+        let logged = localStorage.getItem('hogwarts_logged') === '1';
+        let user = null;
+        try {
+            user = JSON.parse(localStorage.getItem('hogwarts_user') || '{}');
+        } catch (e) { user = null; }
+        if (!logged) {
+            feedbackContent.innerHTML = `<div class="feedback-welcome">Рады приветствовать Вас на нашем сайте! Если у вас уже был опыт работы с нашей программой, пожалуйста, войдите в учетную запись и поделитесь с нами впечатлениями о пройденной программе.</div>`;
+        } else if (user && user.role === 'student') {
+            feedbackContent.innerHTML = `
+                <form class="feedback-form">
+                    <label><span class="feedback-question">Где вы проходили обучение в рамках программы академической мобильности?</span>
+                        <input class="feedback-input" type="text" name="place" autocomplete="off"></label>
+                    <label><span class="feedback-question">Каким образом вы узнали о проекте?</span>
+                        <input class="feedback-input" type="text" name="source" autocomplete="off"></label>
+                    <label><span class="feedback-question">Была ли предоставленная информация о проекте достаточной?</span>
+                        <input class="feedback-input" type="text" name="info" autocomplete="off"></label>
+                    <label><span class="feedback-question">Насколько вы удовлетворены условиями обучения?</span>
+                        <input class="feedback-input" type="text" name="satisfaction" autocomplete="off"></label>
+                    <label><span class="feedback-question">Хотели ли бы вы поучаствовать в проекте снова?</span>
+                        <input class="feedback-input" type="text" name="again" autocomplete="off"></label>
+                    <label><span class="feedback-question">Свободный комментарий</span>
+                        <textarea class="feedback-textarea" name="comment"></textarea></label>
+                    <button type="submit" class="feedback-submit">Отправить</button>
+                </form>
+            `;
+        } else if (user && user.role === 'university') {
+            feedbackContent.innerHTML = `
+                <form class="feedback-form">
+                    <label><span class="feedback-question">Соответствует ли количество зачисленных студентов на программы вашего вуза ожидаемому количеству?</span>
+                        <input class="feedback-input" type="text" name="expected" autocomplete="off"></label>
+                    <label><span class="feedback-question">Были ли трудности при работе с сайтом?</span>
+                        <input class="feedback-input" type="text" name="difficulties" autocomplete="off"></label>
+                    <label><span class="feedback-question">Свободный комментарий</span>
+                        <textarea class="feedback-textarea" name="comment"></textarea></label>
+                    <button type="submit" class="feedback-submit">Отправить</button>
+                </form>
+            `;
+        } else {
+            feedbackContent.innerHTML = `<div class="feedback-welcome">Рады приветствовать Вас на нашем сайте! Если у вас уже был опыт работы с нашей программой, пожалуйста, войдите в учетную запись и поделитесь с нами впечатлениями о пройденной программе.</div>`;
+        }
     }
 }); 

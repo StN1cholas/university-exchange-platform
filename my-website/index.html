@@ -11,7 +11,7 @@
 </head>
 <body>
     <header class="header">
-        <div class="header__logo" id="headerLogo">
+        <div class="header__logo" id="headerLogo" style="cursor:pointer" onclick="window.location.href='index.html'">
             <img src="broom.png" alt="Эмблема ПереДВИЖников" class="header__broom">
         </div>
         <nav class="header__nav">
@@ -31,7 +31,6 @@
     </header>
     <main>
         <section class="hero">
-            <img class="hero__img hero__img--broom" src="broom.png" alt="Фон ПереДВИЖников" />
             <h1 class="hero__title">ПереДВИЖники</h1>
         </section>
         <section class="search-section">
@@ -42,19 +41,17 @@
                 <h2 class="filter-main-title">Подбор направления</h2>
             </div>
             <div class="filter-categories" id="filterCategories">
-                <button class="filter-category" data-category="grade">Успеваемость</button>
-                <button class="filter-category" data-category="universities">Вуз</button>
-                <button class="filter-category" data-category="direction">Направление обучения</button>
-                <button class="filter-category" data-category="form">Форма обучения</button>
-                <button class="filter-category" data-category="language">Язык обучения</button>
-                <button class="filter-category" data-category="city">Город</button>
-                <button class="filter-category" data-category="duration">Продолжительность</button>
-                <button class="filter-category" data-category="course">Курс</button>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="grade">Успеваемость</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="universities">Вуз</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="direction">Направление обучения</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="form">Форма обучения</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="language">Язык обучения</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="city">Город</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="duration">Продолжительность</button></div>
+                <div class="filter-category-wrap"><button class="filter-category" data-category="course">Курс</button></div>
             </div>
             <div class="filter-dropdown always-visible" id="filterDropdown">
-                <div class="filter-options" id="filterOptions">
-                    <!-- Сюда будут подгружаться списки фильтров -->
-                </div>
+                <!-- filterOptions будет рендериться динамически -->
                 <button class="filter-apply" id="filterApplyBtn">Принять</button>
             </div>
             <div class="selected-filters" id="selectedFilters">
@@ -66,6 +63,10 @@
             <p>«ПереДВИЖники» — цифровая академическая платформа для межвузовского обмена. Здесь вы можете найти подходящую программу, узнать сроки подачи заявлений и пройти все этапы зачисления онлайн.</p>
             <p>Платформа объединяет ведущие вузы страны, облегчая процесс поиска и подачи документов для студентов и абитуриентов.</p>
             <p>Мы стремимся сделать академическую мобильность доступной, удобной и прозрачной для всех участников образовательного процесса.</p>
+        </section>
+        <section class="feedback-section">
+            <h2 class="feedback-title">Обратная связь <img src="cat_sber.png" alt="Котик" class="section-cat"></h2>
+            <div id="feedbackContent"></div>
         </section>
     </main>
     <script src="script.js"></script>
