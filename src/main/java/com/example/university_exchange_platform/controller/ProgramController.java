@@ -57,11 +57,11 @@ public class ProgramController {
     public List<ProgramDto> getPrograms(
             // Этот параметр теперь может приходить несколько раз
             @RequestParam(required = false) List<String> universityName,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String language,
-            @RequestParam(required = false) String duration,
-            @RequestParam(required = false) String studyFormat,
-            @RequestParam(required = false) String fieldOfStudy,
+            @RequestParam(required = false) List<String> city,
+            @RequestParam(required = false) List<String> language,
+            @RequestParam(required = false) List<String> duration,
+            @RequestParam(required = false) List<String> studyFormat,
+            @RequestParam(required = false) List<String> fieldOfStudy,
             // Фронтенд называет это "grade", но для бэка это GPA
             @RequestParam(name = "grade", required = false) BigDecimal minGpa
     ) {
